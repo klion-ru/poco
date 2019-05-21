@@ -184,6 +184,11 @@ void Binder::bind(std::size_t pos, const NullData&, Direction dir)
 	realBind(pos, Poco::Data::MetaColumn::FDT_UNKNOWN, 0, 0);
 }
 
+void Binder::bind(std::size_t pos, const Poco::UUID& val, Direction dir)
+{
+	poco_assert(dir == PD_IN);
+	realBind(pos, Poco::Data::MetaColumn::FDT_UNKNOWN, &val, 16);
+}
 
 std::size_t Binder::size() const
 {
@@ -651,6 +656,23 @@ void Binder::bind(std::size_t /*pos*/, const std::list<Poco::Data::NullData>& /*
 	throw NotImplementedException();
 }
 
+
+void Binder::bind(std::size_t /*pos*/, const std::vector<Poco::UUID>& /*val*/, Direction /*dir*/)
+{
+	throw NotImplementedException();
+}
+
+
+void Binder::bind(std::size_t /*pos*/, const std::deque<Poco::UUID>& /*val*/, Direction /*dir*/)
+{
+	throw NotImplementedException();
+}
+
+
+void Binder::bind(std::size_t /*pos*/, const std::list<Poco::UUID>& /*val*/, Direction /*dir*/)
+{
+	throw NotImplementedException();
+}
 
 void Binder::bind(std::size_t /*pos*/, const std::vector<std::string>& /*val*/, Direction /*dir*/)
 {

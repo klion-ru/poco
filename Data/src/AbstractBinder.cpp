@@ -421,6 +421,23 @@ void AbstractBinder::bind(std::size_t pos, const std::list<NullData>& val, Direc
 	throw NotImplementedException("std::list binder must be implemented.");
 }
 
+void AbstractBinder::bind(std::size_t pos, const std::vector<Poco::UUID>& val, Direction dir)
+{
+	throw NotImplementedException("std::vector binder must be implemented.");
+}
+
+
+void AbstractBinder::bind(std::size_t pos, const std::deque<Poco::UUID>& val, Direction dir)
+{
+	throw NotImplementedException("std::deque binder must be implemented.");
+}
+
+
+void AbstractBinder::bind(std::size_t pos, const std::list<Poco::UUID>& val, Direction dir)
+{
+	throw NotImplementedException("std::list binder must be implemented.");
+}
+
 
 void AbstractBinder::bind(std::size_t pos, const Any& val, Direction dir)
 {
@@ -463,7 +480,7 @@ void AbstractBinder::bind(std::size_t pos, const Any& val, Direction dir)
 	else if(type == typeid(BLOB))
 		bind(pos, RefAnyCast<BLOB>(val), dir);
 	else if(type == typeid(void))
-		bind(pos, Keywords::null, dir);
+		bind(pos, NULL_GENERIC, dir);
 #ifndef POCO_LONG_IS_64_BIT
 	else if(type == typeid(long))
 		bind(pos, RefAnyCast<long>(val), dir);
@@ -514,7 +531,7 @@ void AbstractBinder::bind(std::size_t pos, const Poco::Dynamic::Var& val, Direct
 	else if(type == typeid(BLOB))
 		bind(pos, val.extract<BLOB>(), dir);
 	else if(type == typeid(void))
-		bind(pos, Keywords::null, dir);
+		bind(pos, NULL_GENERIC, dir);
 #ifndef POCO_LONG_IS_64_BIT
 	else if(type == typeid(long))
 		bind(pos, val.extract<long>(), dir);

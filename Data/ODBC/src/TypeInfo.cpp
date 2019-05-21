@@ -57,6 +57,7 @@ void TypeInfo::fillCTypes()
 	_cDataTypes.insert(ValueType(SQL_TYPE_DATE, SQL_C_TYPE_DATE));
 	_cDataTypes.insert(ValueType(SQL_TYPE_TIME, SQL_C_TYPE_TIME));
 	_cDataTypes.insert(ValueType(SQL_TYPE_TIMESTAMP, SQL_C_TYPE_TIMESTAMP));
+	_cDataTypes.insert(ValueType(SQL_GUID, SQL_C_GUID));
 }
 
 
@@ -81,6 +82,7 @@ void TypeInfo::fillSQLTypes()
 	_sqlDataTypes.insert(ValueType(SQL_C_TYPE_DATE, SQL_TYPE_DATE));
 	_sqlDataTypes.insert(ValueType(SQL_C_TYPE_TIME, SQL_TYPE_TIME));
 	_sqlDataTypes.insert(ValueType(SQL_C_TYPE_TIMESTAMP, SQL_TYPE_TIMESTAMP));
+	_sqlDataTypes.insert(ValueType(SQL_C_GUID, SQL_GUID));
 }
 
 

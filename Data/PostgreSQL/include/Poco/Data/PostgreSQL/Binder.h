@@ -113,6 +113,9 @@ public:
 	virtual void bind(std::size_t pos, const NullData& val, Direction dir = PD_IN);
 		/// Binds a null.
 
+	virtual void bind(std::size_t pos, const Poco::UUID& val, Direction dir = PD_IN);
+		/// Binds a UUID.
+
 	virtual void bind(std::size_t pos, const std::vector<Poco::Int8>& val, Direction dir = PD_IN);
 
 	virtual void bind(std::size_t pos, const std::deque<Poco::Int8>& val, Direction dir = PD_IN);
@@ -220,6 +223,12 @@ public:
 	virtual void bind(std::size_t pos, const std::deque<NullData>& val, Direction dir = PD_IN, const std::type_info& bindType = typeid(void));
 
 	virtual void bind(std::size_t pos, const std::list<NullData>& val, Direction dir = PD_IN, const std::type_info& bindType = typeid(void));
+
+	virtual void bind(std::size_t pos, const std::vector<Poco::UUID>& val, Direction dir = PD_IN);
+
+	virtual void bind(std::size_t pos, const std::deque<Poco::UUID>& val, Direction dir = PD_IN);
+
+	virtual void bind(std::size_t pos, const std::list<Poco::UUID>& val, Direction dir = PD_IN);
 
 	virtual void bind(std::size_t pos, const std::vector<std::string>& val, Direction dir = PD_IN);
 

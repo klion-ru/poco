@@ -27,6 +27,7 @@
 #include "Poco/Any.h"
 #include "Poco/Dynamic/Var.h"
 #include "Poco/UTFString.h"
+#include "Poco/UUID.h"
 #include <vector>
 #include <deque>
 #include <list>
@@ -37,14 +38,54 @@ namespace Poco {
 namespace Data {
 
 
-typedef NullType NullData;
+enum NullData
+{
+	DATA_NULL_GENERIC = Poco::NULL_GENERIC,
+	DATA_NULL_INTEGER = 1,
+	DATA_NULL_STRING = 2,
+	DATA_NULL_DATE = 3,
+	DATA_NULL_TIME = 4,
+	DATA_NULL_DATETIME = 5,
+	DATA_NULL_BLOB = 6,
+	DATA_NULL_FLOAT = 7,
+	DATA_NULL_UUID = 8
+};
 
+struct NullValue
+{
+
+	NullValue()
+	{}
+
+	template <typename T>
+	operator Poco::Nullable<T>() const
+	{
+		return Poco::Nullable<T>();
+	}
+
+	template <typename T>
+	bool operator==(Poco::Nullable<T>& value) const
+	{
+		return value.isNull();
+	}
+
+	template <typename T>
+	bool operator!=(Poco::Nullable<T>& value) const
+	{
+		return !value.isNull();
+	}
+
+	template <typename T>
+	static NullData nullCode()
+	{
+		return DATA_NULL_GENERIC;
+	}
+
+};
 
 namespace Keywords {
 
-
-static const NullData null = NULL_GENERIC;
-
+	static const NullValue null;
 
 } // namespace Keywords
 
@@ -328,6 +369,18 @@ public:
 
 	virtual void bind(std::size_t pos, const std::list<NullData>& val, Direction dir = PD_IN);
 		/// Binds a null list.
+
+	virtual void bind(std::size_t pos, const Poco::UUID& val, Direction dir = PD_IN) = 0;
+	/// Binds a UUID. In-bound only.
+
+	virtual void bind(std::size_t pos, const std::vector<Poco::UUID>& val, Direction dir = PD_IN);
+	/// Binds a UUID vector.
+
+	virtual void bind(std::size_t pos, const std::deque<Poco::UUID>& val, Direction dir = PD_IN);
+	/// Binds a UUID deque.
+
+	virtual void bind(std::size_t pos, const std::list<Poco::UUID>& val, Direction dir = PD_IN);
+	/// Binds a UUID list.
 
 	void bind(std::size_t pos, const Any& val, Direction dir = PD_IN);
 		/// Binds an Any.

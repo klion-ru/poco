@@ -22,6 +22,7 @@
 #include "Poco/RefCountedObject.h"
 #include "Poco/Data/LOB.h"
 #include "Poco/UTFString.h"
+#include "Poco/UUID.h"
 #include <vector>
 #include <deque>
 #include <list>
@@ -333,6 +334,18 @@ public:
 
 	virtual void prepare(std::size_t pos, const std::list<Poco::Dynamic::Var>& val);
 		/// Prepares a Var list.
+
+	virtual void prepare(std::size_t pos, const Poco::UUID& val) = 0;
+		/// Prepares an UUID.
+
+	virtual void prepare(std::size_t pos, const std::vector<Poco::UUID>& val);
+		/// Prepares an UUID vector.
+
+	virtual void prepare(std::size_t pos, const std::deque<Poco::UUID>& val);
+		/// Prepares an UUID deque.
+
+	virtual void prepare(std::size_t pos, const std::list<Poco::UUID>& val);
+		/// Prepares an UUID list.
 
 	void setLength(Poco::UInt32 length);
 		/// Sets the length of prepared data.

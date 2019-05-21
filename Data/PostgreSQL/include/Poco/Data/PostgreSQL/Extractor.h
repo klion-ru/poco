@@ -123,6 +123,9 @@ public:
 	virtual bool extract(std::size_t pos, Dynamic::Var& val);
 		/// Extracts a Dynamic::Var. Returns false if null was received.
 
+	virtual bool extract(std::size_t pos, Poco::UUID& val);
+		/// Extracts an UUID.
+
 	virtual bool isNull(std::size_t col, std::size_t row);
 		/// Returns true if the value at [col,row] position is null.
 
@@ -323,6 +326,16 @@ public:
 
 	virtual bool extract(std::size_t pos, std::list<Dynamic::Var>& val);
 		/// Extracts a Dynamic::Var list.
+
+	virtual bool extract(std::size_t pos, std::vector<Poco::UUID>& val);
+		/// Extracts an UUID vector.
+
+	virtual bool extract(std::size_t pos, std::deque<Poco::UUID>& val);
+		/// Extracts an UUID deque.
+
+	virtual bool extract(std::size_t pos, std::list<Poco::UUID>& val);
+		/// Extracts an UUID list.
+
 
 private:
 

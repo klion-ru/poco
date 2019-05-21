@@ -22,6 +22,7 @@
 #include "Poco/Data/Constants.h"
 #include "Poco/Data/LOB.h"
 #include "Poco/UTFString.h"
+#include "Poco/UUID.h"
 #include <vector>
 #include <deque>
 #include <list>
@@ -327,6 +328,18 @@ public:
 
 	virtual bool extract(std::size_t pos, std::list<Poco::Dynamic::Var>& val);
 		/// Extracts a Var list.
+
+	virtual bool extract(std::size_t pos, Poco::UUID& val) = 0;
+		/// Extracts an UUID.
+
+	virtual bool extract(std::size_t pos, std::vector<Poco::UUID>& val);
+		/// Extracts an UUID vector.
+
+	virtual bool extract(std::size_t pos, std::deque<Poco::UUID>& val);
+		/// Extracts an UUID deque.
+
+	virtual bool extract(std::size_t pos, std::list<Poco::UUID>& val);
+		/// Extracts an UUID list.
 
 	virtual bool isNull(std::size_t col, std::size_t row = POCO_DATA_INVALID_ROW) = 0;
 		/// Returns true if the value at [col,row] position is null.

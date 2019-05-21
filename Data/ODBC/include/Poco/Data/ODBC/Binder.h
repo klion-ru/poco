@@ -27,6 +27,7 @@
 #include "Poco/Data/ODBC/Utility.h"
 #include "Poco/Data/ODBC/TypeInfo.h"
 #include "Poco/Exception.h"
+#include "Poco/UUID.h"
 #include <vector>
 #include <deque>
 #include <list>
@@ -333,6 +334,18 @@ public:
 
 	void bind(std::size_t pos, const std::list<NullData>& val, Direction dir);
 		/// Binds a null list.
+
+	void bind(std::size_t pos, const Poco::UUID& val, Direction dir);
+	/// Binds a UUID. In-bound only.
+
+	void bind(std::size_t pos, const std::vector<Poco::UUID>& val, Direction dir);
+	/// Binds a UUID vector.
+
+	void bind(std::size_t pos, const std::deque<Poco::UUID>& val, Direction dir);
+	/// Binds a UUID deque.
+
+	void bind(std::size_t pos, const std::list<Poco::UUID>& val, Direction dir);
+	/// Binds a UUID list.
 
 	void setDataBinding(ParameterBinding binding);
 		/// Set data binding type.
@@ -1496,6 +1509,24 @@ inline void Binder::bind(std::size_t pos, const std::list<NullData>& val, Direct
 {
 	bindImplNullContainer(pos, val, dir);
 }
+
+inline void Binder::bind(std::size_t pos, const std::vector<Poco::UUID>& val, Direction dir)
+{
+	bindImplVec(pos, val, SQL_C_BINARY, dir);
+}
+
+
+inline void Binder::bind(std::size_t pos, const std::deque<Poco::UUID>& val, Direction dir)
+{
+	bindImplContainer(pos, val, SQL_C_BINARY, dir);
+}
+
+
+inline void Binder::bind(std::size_t pos, const std::list<Poco::UUID>& val, Direction dir)
+{
+	bindImplContainer(pos, val, SQL_C_BINARY, dir);
+}
+
 
 
 inline void Binder::setDataBinding(Binder::ParameterBinding binding)

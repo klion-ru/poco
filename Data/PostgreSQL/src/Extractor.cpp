@@ -441,6 +441,17 @@ bool Extractor::extract(std::size_t pos, Dynamic::Var& val)
 	return extractStringImpl (pos, val);
 }
 
+bool Extractor::extract(std::size_t pos, Poco::UUID& val)
+{
+	OutputParameter outputParameter = extractPreamble(pos);
+
+	if (isColumnNull(outputParameter))
+	{
+		return false;
+	}
+
+	return val.tryParse(outputParameter.pData());
+}
 
 bool Extractor::isNull(std::size_t col, std::size_t /*row*/)
 {
@@ -865,5 +876,22 @@ bool Extractor::extract(std::size_t , std::list<Dynamic::Var>&)
 	throw NotImplementedException("std::list extractor must be implemented.");
 }
 
+
+bool Extractor::extract(std::size_t, std::vector<Poco::UUID>&)
+{
+	throw NotImplementedException("std::vector extractor must be implemented.");
+}
+
+
+bool Extractor::extract(std::size_t, std::deque<Poco::UUID>&)
+{
+	throw NotImplementedException("std::deque extractor must be implemented.");
+}
+
+
+bool Extractor::extract(std::size_t, std::list<Poco::UUID>&)
+{
+	throw NotImplementedException("std::list extractor must be implemented.");
+}
 
 } } } // namespace Poco::Data::PostgreSQL

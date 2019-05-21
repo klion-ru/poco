@@ -1299,6 +1299,42 @@ bool Extractor::extract(std::size_t pos, std::list<Poco::DynamicAny>& val)
 		throw InvalidAccessException("Direct container extraction only allowed for bound mode.");
 }
 
+bool Extractor::extract(std::size_t pos, Poco::UUID& val)
+{
+	if (Preparator::DE_MANUAL == _dataExtraction)
+		return extractManualImpl(pos, val, SQL_C_BINARY); // SQL_C_GUID
+	else
+		return extractBoundImpl(pos, val);
+}
+
+
+bool Extractor::extract(std::size_t pos, std::vector<Poco::UUID>& val)
+{
+	if (Preparator::DE_BOUND == _dataExtraction)
+		return extractBoundImplContainer(pos, val);
+	else
+		throw InvalidAccessException("Direct container extraction only allowed for bound mode.");
+}
+
+
+bool Extractor::extract(std::size_t pos, std::deque<Poco::UUID>& val)
+{
+	if (Preparator::DE_BOUND == _dataExtraction)
+		return extractBoundImplContainer(pos, val);
+	else
+		throw InvalidAccessException("Direct container extraction only allowed for bound mode.");
+}
+
+
+bool Extractor::extract(std::size_t pos, std::list<Poco::UUID>& val)
+{
+	if (Preparator::DE_BOUND == _dataExtraction)
+		return extractBoundImplContainer(pos, val);
+	else
+		throw InvalidAccessException("Direct container extraction only allowed for bound mode.");
+}
+
+
 
 bool Extractor::isNull(std::size_t col, std::size_t row)
 {

@@ -128,6 +128,9 @@ void Binder::bind(std::size_t pos, const std::string& val, Direction dir)
 
 	_lengthIndicator.push_back(pLenIn);
 
+	if (colSize == 8000 && colSize < size) //klion 20.01.2017
+		colSize = size;
+
 	if (Utility::isError(SQLBindParameter(_rStmt, 
 		(SQLUSMALLINT) pos + 1, 
 		toODBCDirection(dir), 
@@ -178,6 +181,9 @@ void Binder::bind(std::size_t pos, const UTF16String& val, Direction dir)
 	}
 
 	_lengthIndicator.push_back(pLenIn);
+
+	if (colSize == 4000 && colSize < size) //klion 20.01.2017
+		colSize = size;
 
 	if (Utility::isError(SQLBindParameter(_rStmt,
 		(SQLUSMALLINT)pos + 1,
@@ -301,6 +307,13 @@ void Binder::bind(std::size_t pos, const NullData& val, Direction dir)
 
 	_inParams.insert(ParamMap::value_type(SQLPOINTER(0), SQLINTEGER(0)));
 
+	int cDataType = SQL_C_TINYINT; // klion
+	switch (val)
+	{
+		case DATA_NULL_UUID: cDataType = SQL_C_GUID; break; // klion
+		case DATA_NULL_DATETIME: cDataType = SQL_C_TYPE_TIMESTAMP; break; // klion
+	}
+
 	SQLLEN* pLenIn = new SQLLEN;
 	*pLenIn  = SQL_NULL_DATA;
 
@@ -308,13 +321,13 @@ void Binder::bind(std::size_t pos, const NullData& val, Direction dir)
 
 	SQLINTEGER colSize = 0;
 	SQLSMALLINT decDigits = 0;
-	getColSizeAndPrecision(pos, SQL_C_STINYINT, colSize, decDigits);
+	getColSizeAndPrecision(pos, cDataType, colSize, decDigits);
 
 	if (Utility::isError(SQLBindParameter(_rStmt, 
 		(SQLUSMALLINT) pos + 1, 
 		SQL_PARAM_INPUT, 
-		SQL_C_STINYINT, 
-		Utility::sqlDataType(SQL_C_STINYINT), 
+		cDataType,
+		Utility::sqlDataType(cDataType),
 		colSize,
 		decDigits,
 		0, 
@@ -325,6 +338,28 @@ void Binder::bind(std::size_t pos, const NullData& val, Direction dir)
 	}
 }
 
+void Binder::bind(std::size_t pos, const Poco::UUID& val, Direction dir)
+{
+	SQLINTEGER colSize = 16; // sizeof(Poco::UUID);
+	SQLSMALLINT decDigits = 0;
+
+	SQLLEN* pLenIn = new SQLLEN;
+	*pLenIn = colSize;
+
+	_lengthIndicator.push_back(pLenIn);
+
+	if (Utility::isError(SQLBindParameter(_rStmt,
+		(SQLUSMALLINT)pos + 1,
+		toODBCDirection(dir),
+		SQL_C_GUID, 
+		SQL_GUID,
+		colSize,
+		decDigits,
+		(SQLPOINTER)&val, 0, _lengthIndicator.back())))
+	{
+		throw StatementException(_rStmt, "SQLBindParameter()");
+	}
+}
 
 std::size_t Binder::parameterSize(SQLPOINTER pAddr) const
 {
@@ -437,6 +472,15 @@ void Binder::getColSizeAndPrecision(std::size_t pos,
 		if (found)
 		{
 			decDigits = tmp;
+			if (cDataType == SQL_TYPE_TIMESTAMP) //klion 20.01.2017
+			{
+				found = _pTypeInfo->tryGetInfo(cDataType, "MAXIMUM_SCALE", tmp);
+				if (found)
+				{
+					if (decDigits < tmp)
+						decDigits = tmp;
+				}
+			}
 			return;
 		}
 	}
@@ -448,8 +492,11 @@ void Binder::getColSizeAndPrecision(std::size_t pos,
 		decDigits = (SQLSMALLINT) p.decimalDigits();
 		return;
 	} 
-	catch (StatementException&)
+	catch (StatementException& e)
 	{ 
+#ifdef _DEBUG
+		e.toString();
+#endif
 	}
 
 	try
@@ -459,8 +506,11 @@ void Binder::getColSizeAndPrecision(std::size_t pos,
 		decDigits = (SQLSMALLINT) c.precision();
 		return;
 	} 
-	catch (StatementException&) 
+	catch (StatementException& e) 
 	{ 
+#ifdef _DEBUG
+		e.toString();
+#endif
 	}
 
 	// last check, just in case

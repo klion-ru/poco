@@ -26,6 +26,7 @@
 #include "Poco/Tuple.h"
 #include "Poco/AutoPtr.h"
 #include "Poco/SharedPtr.h"
+#include "Poco/UUID.h"
 #include <cstddef>
 
 
@@ -259,7 +260,7 @@ public:
 		poco_assert_dbg (!pBinder.isNull());
 		if (obj.isNull()) 
 		{
-			pBinder->bind(pos++, Poco::Data::Keywords::null, dir);
+			pBinder->bind(pos++, Poco::NULL_GENERIC, dir);
 		}
 		else 
 		{
@@ -272,7 +273,7 @@ public:
 		poco_assert_dbg (!pPreparator.isNull());
 		if (obj.isNull()) 
 		{
-			pPreparator->prepare(pos++, Poco::Data::Keywords::null);
+			pPreparator->prepare(pos++, Poco::NULL_GENERIC);
 		}
 		else 
 		{
@@ -307,6 +308,66 @@ private:
 	TypeHandler(const TypeHandler&);
 	TypeHandler& operator=(const TypeHandler&);
 };
+
+void 
+TypeHandler<Nullable<Poco::UUID> >::
+bind(std::size_t pos, const Nullable<Poco::UUID>& obj, AbstractBinder::Ptr pBinder, AbstractBinder::Direction dir)
+{
+	poco_assert_dbg(!pBinder.isNull());
+	if (obj.isNull())
+	{
+		pBinder->bind(pos++, Poco::Data::DATA_NULL_UUID, dir);
+	}
+	else
+	{
+		pBinder->bind(pos++, obj.value(), dir);
+	}
+}
+
+void
+TypeHandler<Nullable<Poco::UUID> >::
+prepare(std::size_t pos, const Nullable<Poco::UUID>& obj, AbstractPreparator::Ptr pPreparator)
+{
+	poco_assert_dbg(!pPreparator.isNull());
+	if (obj.isNull())
+	{
+		pPreparator->prepare(pos++, Poco::Data::DATA_NULL_UUID);
+	}
+	else
+	{
+		pPreparator->prepare(pos++, obj.value());
+	}
+}
+
+void
+TypeHandler<Nullable<Poco::DateTime> >::
+bind(std::size_t pos, const Nullable<DateTime>& obj, AbstractBinder::Ptr pBinder, AbstractBinder::Direction dir)
+{
+	poco_assert_dbg(!pBinder.isNull());
+	if (obj.isNull())
+	{
+		pBinder->bind(pos++, Poco::Data::DATA_NULL_DATETIME, dir);
+	}
+	else
+	{
+		pBinder->bind(pos++, obj.value(), dir);
+	}
+}
+
+void
+TypeHandler<Nullable<Poco::DateTime> >::
+prepare(std::size_t pos, const Nullable<Poco::DateTime>& obj, AbstractPreparator::Ptr pPreparator)
+{
+	poco_assert_dbg(!pPreparator.isNull());
+	if (obj.isNull())
+	{
+		pPreparator->prepare(pos++, Poco::Data::DATA_NULL_DATETIME);
+	}
+	else
+	{
+		pPreparator->prepare(pos++, obj.value());
+	}
+}
 
 
 /// Poco::Tuple TypeHandler specializations

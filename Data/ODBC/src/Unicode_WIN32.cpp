@@ -331,7 +331,7 @@ SQLRETURN SQLGetDiagRec(SQLSMALLINT fHandleType,
 		pcbErrorMsg);
 
 	makeUTF8(bufState, stateLen * sizeof(wchar_t), szSqlState, stateLen);
-	makeUTF8(bufErr, *pcbErrorMsg * sizeof(wchar_t), szErrorMsg, cbErrorMsgMax);
+	makeUTF8(bufErr, *pcbErrorMsg * sizeof(wchar_t), szErrorMsg, cbErrorMsgMax-1);  //klion 20.01.2017
 
 	return rc;
 }

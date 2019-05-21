@@ -433,5 +433,22 @@ bool AbstractExtractor::extract(std::size_t pos, std::list<Poco::Dynamic::Var>& 
 	throw NotImplementedException("std::list extractor must be implemented.");
 }
 
+bool AbstractExtractor::extract(std::size_t pos, std::vector<Poco::UUID>& val)
+{
+	throw NotImplementedException("std::vector extractor must be implemented.");
+}
+
+
+bool AbstractExtractor::extract(std::size_t pos, std::deque<Poco::UUID>& val)
+{
+	throw NotImplementedException("std::deque extractor must be implemented.");
+}
+
+
+bool AbstractExtractor::extract(std::size_t pos, std::list<Poco::UUID>& val)
+{
+	throw NotImplementedException("std::list extractor must be implemented.");
+}
+
 
 } } // namespace Poco::Data

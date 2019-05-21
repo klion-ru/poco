@@ -30,6 +30,7 @@
 #include "Poco/DateTime.h"
 #include "Poco/Any.h"
 #include "Poco/Dynamic/Var.h"
+#include "Poco/UUID.h"
 #include "Poco/Nullable.h"
 #include "Poco/UTFString.h"
 #include "Poco/Exception.h"
@@ -328,6 +329,18 @@ public:
 
 	bool extract(std::size_t pos, std::list<Poco::DynamicAny>& val);
 		/// Extracts a DynamicAny list.
+
+	bool extract(std::size_t pos, Poco::UUID& val);
+		/// Extracts an UUID.
+
+	bool extract(std::size_t pos, std::vector<Poco::UUID>& val);
+		/// Extracts an UUID vector.
+
+	bool extract(std::size_t pos, std::deque<Poco::UUID>& val);
+		/// Extracts an UUID deque.
+
+	bool extract(std::size_t pos, std::list<Poco::UUID>& val);
+		/// Extracts an UUID list.
 
 	void setDataExtraction(Preparator::DataExtraction ext);
 		/// Set data extraction mode.

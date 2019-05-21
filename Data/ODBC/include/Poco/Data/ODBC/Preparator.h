@@ -27,6 +27,7 @@
 #include "Poco/Data/LOB.h"
 #include "Poco/Any.h"
 #include "Poco/DynamicAny.h"
+#include "Poco/UUID.h"
 #include "Poco/DateTime.h"
 #include "Poco/SharedPtr.h"
 #include "Poco/UTFString.h"
@@ -376,6 +377,19 @@ public:
 
 	void prepare(std::size_t pos, const std::list<Poco::DynamicAny>& val);
 		/// Prepares a DynamicAny list.
+
+	void prepare(std::size_t pos, const Poco::UUID& val);
+	/// Prepares an UUID.
+
+	void prepare(std::size_t pos, const std::vector<Poco::UUID>& val);
+	/// Prepares an UUID vector.
+
+	void prepare(std::size_t pos, const std::deque<Poco::UUID>& val);
+	/// Prepares an UUID deque.
+
+	void prepare(std::size_t pos, const std::list<Poco::UUID>& val);
+	/// Prepares an UUID list.
+
 
 	std::size_t columns() const;
 		/// Returns the number of columns.
@@ -886,7 +900,7 @@ inline void Preparator::prepare(std::size_t pos, const long&)
 
 inline void Preparator::prepare(std::size_t pos, const unsigned long&)
 {
-	prepareFixedSize<long>(pos, SQL_C_SLONG);
+	prepareFixedSize<unsigned long>(pos, SQL_C_ULONG); //klion 20.01.2017
 }
 
 
@@ -1220,6 +1234,28 @@ inline void Preparator::prepare(std::size_t pos, const std::list<Poco::DynamicAn
 	prepareImpl<std::list<Poco::DynamicAny> >(pos, &val);
 }
 
+inline void Preparator::prepare(std::size_t pos, const Poco::UUID&)
+{
+	prepareFixedSize<Poco::UUID>(pos, SQL_C_BINARY); // SQL_C_GUID
+}
+
+
+inline void Preparator::prepare(std::size_t pos, const std::vector<Poco::UUID>& val)
+{
+	prepareFixedSize<Poco::UUID>(pos, SQL_C_BINARY, val.size()); // SQL_C_GUID
+}
+
+
+inline void Preparator::prepare(std::size_t pos, const std::deque<Poco::UUID>& val)
+{
+	prepareFixedSize<Poco::UUID>(pos, SQL_C_BINARY, val.size()); // SQL_C_GUID
+}
+
+
+inline void Preparator::prepare(std::size_t pos, const std::list<Poco::UUID>& val)
+{
+	prepareFixedSize<Poco::UUID>(pos, SQL_C_BINARY, val.size()); // SQL_C_GUID
+}
 
 inline std::size_t Preparator::bulkSize(std::size_t col) const
 {

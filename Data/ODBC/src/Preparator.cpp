@@ -158,7 +158,8 @@ std::size_t Preparator::maxDataSize(std::size_t pos) const
 
 		// accomodate for terminating zero (non-bulk only!)
 		MetaColumn::ColumnDataType type = mc.type();
-		if (!isBulk() && ((ODBCMetaColumn::FDT_WSTRING == type) || (ODBCMetaColumn::FDT_STRING == type))) ++sz;
+                //klion 20.01.2017
+		if (sz > 0 && !isBulk() && ((ODBCMetaColumn::FDT_WSTRING == type) || (ODBCMetaColumn::FDT_STRING == type))) ++sz;
 	}
 	catch (StatementException&) { }
 
